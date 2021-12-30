@@ -59,6 +59,15 @@ module.exports = (appInfo) => {
     agent: false,
   };
 
+  config.sequelize = {
+    dialect: "mysql",
+    host: "127.0.0.1",
+    port: 3306,
+    database: "dev-ledger",
+    username: "root",
+    password: "mysqlhhxx0@",
+  };
+
   // 鉴权
   config.jwt = {
     secret: "abc",

@@ -24,6 +24,7 @@ class UserController extends Controller {
 
     // 验证数据库是否存在改用户名
     const userInfo = await ctx.service.user.getUserByName(username);
+    console.log("123", userInfo);
     // 判断是否已经存在
     if (userInfo && userInfo.id) {
       ctx.body = {
@@ -42,8 +43,9 @@ class UserController extends Controller {
       avatar: defaultAvatar,
       create_time: moment().format("YYYY-MM-DD H:mm:ss"),
     });
-
-    if (result && result.insertId) {
+    console.log("rr", result);
+    // if (result && result.insertId) {
+    if (result && result.dataValues) {
       ctx.body = {
         code: 200,
         msg: "注册成功",
@@ -134,19 +136,19 @@ class UserController extends Controller {
       const user_id = decode.id;
       const userInfo = await ctx.service.user.getUserByName(decode.username);
       const result = await ctx.service.user.editUserInfo({
-        ...userInfo,
-        signature,
-        avatar,
+        ...userInfo.dataValues,
+        signature: signature || userInfo.dataValues.signature,
+        avatar: avatar || userInfo.dataValues.avatar,
       });
-      console.log(result);
+      console.log("re", result);
       ctx.body = {
         code: 200,
         msg: "success",
         data: {
           id: user_id,
-          signature: signature || userInfo.signature,
-          username: userInfo.username,
-          avatar: avatar || userInfo.avatar,
+          signature: signature || userInfo.dataValues.signature,
+          username: userInfo.dataValues.username,
+          avatar: avatar || userInfo.dataValues.avatar,
         },
       };
     } catch (error) {

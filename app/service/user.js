@@ -6,7 +6,8 @@ class UserService extends Service {
   async getUserByName(username) {
     const { app } = this;
     try {
-      const result = await app.mysql.get("user", { username });
+      // const result = await app.mysql.get("user", { username });
+      const result = await app.model.User.findOne({ where: { username } });
       return result;
     } catch (error) {
       console.log(error);
@@ -18,7 +19,8 @@ class UserService extends Service {
   async register(params) {
     const { app } = this;
     try {
-      const result = await app.mysql.insert("user", params);
+      // const result = await app.mysql.insert("user", params);
+      const result = await app.model.User.create({ ...params });
       return result;
     } catch (error) {
       console.log(error);
@@ -29,11 +31,16 @@ class UserService extends Service {
   // 修改用户信息
   async editUserInfo(params) {
     const { app } = this;
+    console.log('parmas',params);
     try {
-      const result = await app.mysql.update(
-        "user",
+      // const result = await app.mysql.update(
+      //   "user",
+      //   { ...params },
+      //   { id: params.id }
+      // );
+      const result = await app.model.User.update(
         { ...params },
-        { id: params.id }
+        { where: { username: params.username } }
       );
       return result;
     } catch (error) {
