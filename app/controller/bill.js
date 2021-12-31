@@ -13,6 +13,7 @@ class BillController extends Controller {
       type_name,
       pay_type,
       remark = "",
+      created_time,
     } = ctx.request.body;
 
     // 判空
@@ -39,10 +40,11 @@ class BillController extends Controller {
         amount,
         type_id,
         type_name,
-        date: moment().format("YYYY-MM-DD H:mm:ss"),
         pay_type,
         remark: remark || decode.remark || "",
         user_id,
+        created_time: created_time || moment().format("YYYY-MM-DD h:mm:ss"),
+        // created_at: custom_date || moment().format("YYYY-MM-DD h:mm:ss"),
       });
       if (!result) {
         ctx.body = {
@@ -70,7 +72,7 @@ class BillController extends Controller {
   async list() {
     const { ctx, app } = this;
     // 获取 日期，分页，类型 数据
-    const { date = moment(), page = 1, size = 10, type_id = "all" } = ctx.query;
+    const { created_time, page = 1, size = 10, type_id = "all" } = ctx.query;
     try {
       // 通过tonken解析拿到user_id
       const token = ctx.request.header.authorization;
@@ -79,19 +81,16 @@ class BillController extends Controller {
       if (!decode) {
         return;
       }
+      console.log("de", decode);
       const user_id = decode.id;
       // 查询bill的账单列表(获取该用户的所以数据)
-      const list = await ctx.service.bill.list(user_id);
-      // 过滤对应条件的数据
-      const filterList = list.filter((list) => {
-        const isSame = moment(list.date).isSame(date, "day"); // 判断两个时间是否一致
-        console.log("time", isSame);
-        // type_id 不指定时查询对应的账单类型
-        if (type_id !== "all") {
-          return isSame && type_id === list.type_id;
-        }
-        return isSame;
+      const list = await ctx.service.bill.list({
+        user_id,
+        limit: size,
+        offset: (page - 1) * size,
+        created_time,
       });
+      console.log(list);
       // 当月支出
       const totalExpense = null;
       // 当月收入
@@ -100,8 +99,8 @@ class BillController extends Controller {
         code: 200,
         msg: "success",
         data: {
-          data: filterList,
-          total: list.length,
+          // data: filterList,
+          ...list,
           totalExpense, // 当月支出
           totalIncome, // 当月收入
         },

@@ -6,13 +6,13 @@ module.exports = (app) => {
     "user",
     {
       id: { type: INTEGER, primaryKey: true, autoIncrement: true },
-      created_at: DATE,
       username: STRING(100),
       password: STRING(100),
       signature: STRING(100),
       avatar: STRING(100),
-      create_time: DATE,
+      created_at: DATE,
       updated_at: DATE,
+      created_time: DATE,
     },
     { freezeTableName: true }
   );

@@ -12,10 +12,10 @@ module.exports = {
     package: "egg-view-ejs",
   },
 
-  mysql: {
-    enable: true,
-    package: "egg-mysql",
-  },
+  // mysql: {
+  //   enable: true,
+  //   package: "egg-mysql",
+  // },
 
   sequelize: {
     enable: true,

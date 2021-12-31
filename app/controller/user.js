@@ -66,6 +66,7 @@ class UserController extends Controller {
     const { username, password } = ctx.request.body;
     // 根据用户名，在数据库中查询相应id的操作
     const userInfo = await ctx.service.user.getUserByName(username);
+    console.log('a',userInfo);
     // 没找到就是没有该用户
     if (!userInfo || !userInfo.id) {
       ctx.body = {
