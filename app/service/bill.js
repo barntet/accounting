@@ -1,6 +1,8 @@
 "use strict";
 
 const Service = require("egg").Service;
+const { Op } = require("sequelize");
+const moment = require("moment");
 
 class BillService extends Service {
   async add(params) {
@@ -18,17 +20,23 @@ class BillService extends Service {
   }
 
   // 列表查询
-  async list({ user_id, offset, limit }) {
-    console.log("213", user_id, offset, limit);
+  async list({ user_id, offset, limit, created_time }) {
     const { app } = this;
-    // const QUERY_STRING = "id,pay_type,amount,date,type_id,type_name,remark";
-    // const sql = `select ${QUERY_STRING} from bill where user_id = ${id}`;
     try {
-      // const result = await app.mysql.query(sql);
       const result = await app.model.Bill.findAndCountAll(
         {
-          where: { user_id },
-          order: [["created_at", "DESC"]],
+          where: {
+            [Op.and]: [
+              { user_id },
+              {
+                created_time: {
+                  [Op.gt]: moment(created_time).startOf("month").format(),
+                  [Op.lt]: moment(created_time).endOf("month").format(),
+                },
+              },
+            ],
+          },
+          order: [["created_time", "DESC"]],
         },
         offset,
         limit

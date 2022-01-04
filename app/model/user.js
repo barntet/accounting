@@ -1,7 +1,7 @@
 "use strict";
 
 module.exports = (app) => {
-  const { STRING, INTEGER, DATE } = app.Sequelize;
+  const { STRING, INTEGER, TIME } = app.Sequelize;
   const User = app.model.define(
     "user",
     {
@@ -10,9 +10,9 @@ module.exports = (app) => {
       password: STRING(100),
       signature: STRING(100),
       avatar: STRING(100),
-      created_at: DATE,
-      updated_at: DATE,
-      created_time: DATE,
+      created_at: TIME,
+      updated_at: TIME,
+      created_time: TIME,
     },
     { freezeTableName: true }
   );

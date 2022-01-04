@@ -2,7 +2,7 @@
 const moment = require("moment");
 
 module.exports = (app) => {
-  const { STRING, INTEGER, DATE } = app.Sequelize;
+  const { STRING, INTEGER, TIME } = app.Sequelize;
   const Bill = app.model.define(
     "bill",
     {
@@ -13,9 +13,9 @@ module.exports = (app) => {
       pay_type: INTEGER,
       remark: STRING(100),
       user_id: INTEGER,
-      created_time: DATE,
-      created_at: DATE,
-      updated_at: DATE,
+      created_time: TIME,
+      created_at: TIME,
+      updated_at: TIME,
     },
     {
       freezeTableName: true,
