@@ -10,8 +10,7 @@ class UserService extends Service {
       const result = await app.model.User.findOne({ where: { username } });
       return result;
     } catch (error) {
-      console.log(error);
-      return null;
+      throw error;
     }
   }
 
@@ -23,29 +22,22 @@ class UserService extends Service {
       const result = await app.model.User.create({ ...params });
       return result;
     } catch (error) {
-      console.log(error);
-      return null;
+      throw error;
     }
   }
 
   // 修改用户信息
   async editUserInfo(params) {
     const { app } = this;
-    console.log('parmas',params);
+    console.log("parmas", params);
     try {
-      // const result = await app.mysql.update(
-      //   "user",
-      //   { ...params },
-      //   { id: params.id }
-      // );
       const result = await app.model.User.update(
         { ...params },
         { where: { username: params.username } }
       );
       return result;
     } catch (error) {
-      console.log(error);
-      return null;
+      throw error;
     }
   }
 }
